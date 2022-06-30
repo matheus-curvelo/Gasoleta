@@ -15,17 +15,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       alcoolInput: '',
       gasolinaInput: '',
       modalVisible: false,
-      resultado: ''
-
+      combustivel: ''
     }
 
     this.calcular = this.calcular.bind(this)
     this.voltar = this.voltar.bind(this)
-    this.limpar = this.limpar.bind(this)
   }
 
   calcular() {
@@ -34,21 +31,28 @@ class App extends Component {
     } else {
       this.setState({ modalVisible: true })
 
-      this.setState({ resultado: this.state.alcoolInput / this.state.gasolinaInput })
+      this.state.alcoolInput = parseInt(this.state.alcoolInput)
+      this.state.gasolinaInput = parseInt(this.state.gasolinaInput)
+
+      if (this.state.alcoolInput / this.state.gasolinaInput < 0.7) {
+        this.setState({ combustivel: 'Álcool' })
+
+      } else {
+        this.setState({ combustivel: 'Gasolina' })
+      }
     }
   }
 
   voltar() {
     this.setState({ modalVisible: false })
 
-  }
-
-  limpar() {
     this.textInputAlcool.clear()
     this.textInputGasolina.clear()
 
     this.setState({ alcoolInput: '' })
     this.setState({ gasolinaInput: '' })
+    this.setState({ combustivel: '' })
+
   }
 
   render() {
@@ -85,14 +89,6 @@ class App extends Component {
               />
             </View>
 
-            <View style={styles.button}>
-              <Button
-                title='Limpar'
-                color='#B22222'
-                onPress={this.limpar}
-              />
-            </View>
-
             <Modal
               animationType='fade'
               transparent={true}
@@ -103,7 +99,7 @@ class App extends Component {
                 <Image style={styles.modalImage} source={require('./src/img/gas.png')} />
 
                 <Text style={styles.textResult}>
-                  Compensa usar Gasolina
+                  Compensa usar {this.state.combustivel}
                 </Text>
 
                 <Text style={styles.textPricesTitle}>
@@ -141,6 +137,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#333333',
   },
 
+  // Parte de cima
+
   topArea: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -156,6 +154,8 @@ const styles = StyleSheet.create({
   image: {
     marginVertical: 20
   },
+
+  // Parte de baixo
 
   text: {
     color: '#FFF',
