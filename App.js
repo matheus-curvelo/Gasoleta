@@ -31,8 +31,8 @@ class App extends Component {
     } else {
       this.setState({ modalVisible: true })
 
-      this.state.alcoolInput = parseInt(this.state.alcoolInput)
-      this.state.gasolinaInput = parseInt(this.state.gasolinaInput)
+      this.state.alcoolInput = parseFloat(this.state.alcoolInput).toFixed(2)
+      this.state.gasolinaInput = parseFloat(this.state.gasolinaInput).toFixed(2)
 
       if (this.state.alcoolInput / this.state.gasolinaInput < 0.7) {
         this.setState({ combustivel: 'Álcool' })
