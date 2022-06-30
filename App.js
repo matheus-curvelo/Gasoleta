@@ -16,28 +16,39 @@ class App extends Component {
     super(props);
     this.state = {
 
-      alcoolInput: '7',
-      gasolinaInput: '10',
+      alcoolInput: '',
+      gasolinaInput: '',
       modalVisible: false,
+      resultado: ''
 
     }
 
     this.calcular = this.calcular.bind(this)
     this.voltar = this.voltar.bind(this)
+    this.limpar = this.limpar.bind(this)
   }
 
   calcular() {
     if (this.state.alcoolInput === '' || this.state.gasolinaInput === '') {
       alert('Preencha todos os campos!')
     } else {
-      // alert('Alcool: ' + this.state.alcoolInput + '\nGasolina: ' + this.state.gasolinaInput)
       this.setState({ modalVisible: true })
+
+      this.setState({ resultado: this.state.alcoolInput / this.state.gasolinaInput })
     }
   }
 
   voltar() {
     this.setState({ modalVisible: false })
 
+  }
+
+  limpar() {
+    this.textInputAlcool.clear()
+    this.textInputGasolina.clear()
+
+    this.setState({ alcoolInput: '' })
+    this.setState({ gasolinaInput: '' })
   }
 
   render() {
@@ -54,29 +65,38 @@ class App extends Component {
             </Text>
           </View>
 
-          <View style={styles.bottomArea}>
+          <View>
 
             <Text style={styles.text}>
               Álcool (preço por litro):
             </Text>
-            <TextInput style={styles.input} keyboardType={'numeric'} onChangeText={(alcool) => this.setState({ alcoolInput: alcool })} />
+            <TextInput ref={input => { this.textInputAlcool = input }} style={styles.input} keyboardType={'numeric'} onChangeText={(alcool) => this.setState({ alcoolInput: alcool })} />
 
             <Text style={styles.text}>
               Gasolina (preço por litro)
             </Text>
-            <TextInput style={styles.input} keyboardType={'numeric'} onChangeText={(gasolina) => this.setState({ gasolinaInput: gasolina })} />
+            <TextInput ref={input => { this.textInputGasolina = input }} style={styles.input} keyboardType={'numeric'} onChangeText={(gasolina) => this.setState({ gasolinaInput: gasolina })} />
 
-            <Button
-              title='Calcular'
-              color='#EF4130'
-              onPress={this.calcular}
-            />
+            <View style={styles.button}>
+              <Button
+                title='Calcular'
+                color='#EF4130'
+                onPress={this.calcular}
+              />
+            </View>
+
+            <View style={styles.button}>
+              <Button
+                title='Limpar'
+                color='#B22222'
+                onPress={this.limpar}
+              />
+            </View>
 
             <Modal
               animationType='fade'
               transparent={true}
               visible={this.state.modalVisible}
-
             >
               <View style={styles.modalArea}>
 
@@ -91,11 +111,11 @@ class App extends Component {
                 </Text>
 
                 <Text style={styles.textPricesResult}>
-                  Álcool: R$
+                  Álcool: R$ {this.state.alcoolInput}
                 </Text>
 
                 <Text style={styles.textPricesResult}>
-                  Gasolina: R$
+                  Gasolina: R$ {this.state.gasolinaInput}
                 </Text>
 
                 <View style={styles.modalButton}>
@@ -105,11 +125,8 @@ class App extends Component {
                     onPress={this.voltar}
                   />
                 </View>
-
-
               </View>
             </Modal>
-
           </View>
         </ScrollView>
       </View>
@@ -140,14 +157,14 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
 
-  bottomArea: {
-    // paddingBottom: 20
-  },
-
   text: {
     color: '#FFF',
     fontSize: 14,
     fontWeight: 'bold'
+  },
+
+  button: {
+    marginVertical: 5
   },
 
   input: {
@@ -164,7 +181,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#333333',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingVertical: 50
   },
 
   modalImage: {
