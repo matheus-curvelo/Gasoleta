@@ -6,8 +6,8 @@ import {
   View,
   Image,
   TextInput,
-  TouchableOpacity,
   ScrollView,
+  Button
 } from 'react-native';
 
 class App extends Component {
@@ -15,51 +15,56 @@ class App extends Component {
     super(props);
     this.state = {
 
-      alcool: '',
-      gasolina: ''
+      alcoolInput: '',
+      gasolinaInput: '',
 
+    }
+
+    this.calcular = this.calcular.bind(this)
+  }
+
+  calcular() {
+    if (this.state.alcoolInput === '' || this.state.gasolinaInput === '') {
+      alert('Preencha todos os campos!')
+    } else {
+      alert('Alcool: ' + this.state.alcoolInput + '\nGasolina: ' + this.state.gasolinaInput)
     }
   }
   render() {
     return (
       <View style={styles.container}>
 
-      <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
 
+          <View style={styles.topArea}>
+            <Image style={styles.image} source={require('./src/img/logo.png')} />
 
-        <View style={styles.topArea}>
-          <Image style={styles.image} source={require('./src/img/logo.png')} />
-
-          <Text style={styles.mainText}>
-            Qual a melhor opção?
-          </Text>
-        </View>
-
-        <View style={styles.bottomArea}>
-
-          <Text style={styles.text}> 
-            Álcool (preço por litro):
-          </Text>
-          <TextInput style={styles.input} />
-
-          <Text style={styles.text}> 
-            Gasolina (preço por litro)
-          </Text>
-          <TextInput style={styles.input} />
-
-          <TouchableOpacity style={styles.buttonArea}>
-            <Text style={styles.buttonText}>
-              Calcular
+            <Text style={styles.mainText}>
+              Qual a melhor opção?
             </Text>
-          </TouchableOpacity>
+          </View>
 
-        </View>
+          <View style={styles.bottomArea}>
 
+            <Text style={styles.text}>
+              Álcool (preço por litro):
+            </Text>
+            <TextInput style={styles.input} keyboardType={'default'} onChangeText={(alcool) => this.setState({ alcoolInput: alcool })} />
 
-      </ScrollView>
+            <Text style={styles.text}>
+              Gasolina (preço por litro)
+            </Text>
+            <TextInput style={styles.input} keyboardType={'numeric'} onChangeText={(gasolina) => this.setState({ gasolinaInput: gasolina })} />
+
+            <Button
+              title='Calcular'
+              color='#EF4130'
+              onPress={this.calcular}
+            />
+
+          </View>
+        </ScrollView>
       </View>
-
-
     );
   }
 }
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
   topArea: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 50
+    paddingVertical: 50
   },
 
   mainText: {
@@ -103,18 +108,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 5
   },
-
-  buttonArea: {
-    alignItems: 'center',
-    backgroundColor: '#EF4130',
-    borderRadius: 5
-  },
-
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    padding: 10,
-  }
 });
 
 export default App;
